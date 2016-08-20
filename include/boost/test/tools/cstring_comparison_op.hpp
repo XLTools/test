@@ -39,8 +39,10 @@ namespace op {
 #define DEFINE_CSTRING_COMPARISON( oper, name, rev )                \
 template<typename Lhs,typename Rhs>                                 \
 struct name<Lhs,Rhs,typename boost::enable_if_c<                    \
-    unit_test::is_cstring<Lhs>::value &&                            \
-    unit_test::is_cstring<Rhs>::value>::type> {                     \
+    (unit_test::is_cstring<Lhs>::value || mpl::is_same<typename decay<Lhs>::type, std::string>::value ) \
+      &&                                                            \
+    (unit_test::is_cstring<Rhs>::value || mpl::is_same<typename decay<Rhs>::type, std::string>::value ) \
+  >::type> {                     \
     typedef typename boost::add_const<                              \
                 typename remove_pointer<                            \
                     typename decay<Lhs>::type>::type>::type         \
